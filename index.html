@@ -270,7 +270,6 @@
             };
 
             const renderDetail = () => {
-                // Busco dinámicamente el item del estado maestro para que sea 100% reactivo al tipear
                 const item = selectedItem ? (selectedItem.type === 'clients' ? data.clients : data.suppliers).find(i => i.id === selectedItem.id) : null;
                 if (!item) return null;
 
@@ -299,7 +298,6 @@
 
                         <div className="flex-1 overflow-auto bg-slate-100">
                             <div className="min-w-[700px]">
-                                {/* Encabezado de la tabla */}
                                 <div className="flex bg-slate-200 border-b border-slate-300 font-bold text-[9px] uppercase sticky top-0 z-10">
                                     <div className="w-32 p-3 border-r border-slate-300">Fecha</div>
                                     <div className="flex-1 p-3 border-r border-slate-300">Detalle</div>
@@ -309,7 +307,6 @@
                                     <div className="w-16 p-3 text-center">Foto</div>
                                 </div>
                                 
-                                {/* Filas de movimientos */}
                                 {item.history.map((t, idx) => (
                                     <div key={t.id} className="flex bg-white border-b border-slate-200 text-xs">
                                         <div className="w-32 grid-cell"><input type="date" className="w-full p-2 bg-transparent" value={t.fecha} onChange={e => updateField(item.id, t.id, 'fecha', e.target.value, type)} /></div>
@@ -338,14 +335,13 @@
                                     </div>
                                 ))}
 
-                                {/* CELDA DE TOTALES ACUMULADOS (Estilo Excel, Reactiva) */}
+                                {/* FILA DE TOTALES AUTOMÁTICOS */}
                                 <div className="flex bg-slate-100 border-b-2 border-slate-300 font-black text-xs sticky bottom-0 z-10 shadow-[0_-2px_5px_rgba(0,0,0,0.03)]">
                                     <div className="w-32 p-3 border-r border-slate-300 text-slate-500 text-[10px] uppercase flex items-center">TOTALES:</div>
                                     <div className="flex-1 p-3 border-r border-slate-300"></div>
                                     <div className="w-24 p-3 border-r border-slate-300 text-right font-mono text-red-600 bg-red-50/60 flex items-center justify-end">
                                         ${totals.d.toLocaleString()}
                                     </div>
-                                    {/* Celda con el total de dinero entregado */}
                                     <div className="w-24 p-3 border-r border-slate-300 text-right font-mono text-blue-600 bg-blue-50/80 border-b-2 border-blue-500 flex items-center justify-end">
                                         ${totals.p.toLocaleString()}
                                     </div>
@@ -451,6 +447,17 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+    </script>
+
+    <!-- REGISTRO DEL SERVICE WORKER PARA MODO OFFLINE (PWA) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Modo offline PWA listo para usar.'))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
     </script>
 </body>
 </html>
